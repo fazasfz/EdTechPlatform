@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEARNX - Student Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #2c3e50;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #3498db;
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 25px;
+        }
+
+        /* Notification Bar */
+        .notification-bar {
+            background-color: #e3f2fd;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-icon {
+            margin-right: 10px;
+            color: #1976d2;
+        }
+
+        .close-notification {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            font-size: 16px;
+        }
+
+        /* Sections */
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* My Courses */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .course-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-image {
+            height: 150px;
+            background-color: #ddd;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .course-info {
+            padding: 15px;
+        }
+
+        .course-title {
+            font-size: 16px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .course-instructor {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .course-progress {
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background-color: #eee;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #3498db;
+            width: 65%;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            color: #666;
+            text-align: right;
+        }
+
+        .course-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #ddd;
+        }
+
+        /* Course Catalog */
+        .search-bar {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 14px;
+        }
+
+        .search-btn {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+
+        .catalog-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .filter-dropdown {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        /* Learning Content */
+        .learning-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .video-player {
+            flex: 2;
+        }
+
+        .video-container {
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 400px;
+            background-color: #222;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .video-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .transcript-container {
+            flex: 1;
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .transcript-title {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .transcript-content {
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .transcript-line {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .transcript-line:hover {
+            background-color: #f5f5f5;
+        }
+
+        .transcript-line.active {
+            background-color: #e3f2fd;
+            font-weight: 500;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 25px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .course-preview-header {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .course-preview-image {
+            width: 200px;
+            height: 120px;
+            background-color: #ddd;
+            border-radius: 4px;
+        }
+
+        .course-preview-info h3 {
+            margin-bottom: 10px;
+        }
+
+        .course-preview-info p {
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .syllabus-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .syllabus-item h4 {
+            margin-bottom: 8px;
+        }
+
+        .syllabus-item p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .tutor-profile {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .tutor-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #ddd;
+        }
+
+        .tutor-info h3 {
+            margin-bottom: 8px;
+        }
+
+        .tutor-info p {
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .learning-container {
+                flex-direction: column;
+            }
+            
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .course-preview-header {
+                flex-direction: column;
+            }
+            
+            .course-preview-image {
+                width: 100%;
+                height: 180px;
+            }
+            #chat {
+  background: #fff;
+  border: 1px solid #ccc;
+  height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+#chat .you {
+  text-align: right;
+  color: #007bff;
+  margin-bottom: 5px;
+}
+
+#chat .bot {
+  text-align: left;
+  color: #28a745;
+  margin-bottom: 5px;
+}
+
+#input-area {
+  display: flex;
+  gap: 10px;
+}
+
+#msg {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">LEARNX</div>
+        <div class="nav-links">
+            <a href="#" class="active">Dashboard</a>
+            <a href="courses.html">Courses</a>
+            <a href="index.html">Home</a>
+            
+            <a href="#">Fatima</a>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard">
+        <div class="main-content">
+            <!-- Notification Bar -->
+            <div class="notification-bar" id="notificationBar">
+                <div class="notification-content">
+                    <span class="notification-icon">🔔</span>
+                    <span>New announcement: Mid-term exams will begin next Monday. Please check your schedule.</span>
+                </div>
+                <button class="close-notification" id="closeNotification">×</button>
+            </div>
+
+            <!-- My Courses Section -->
+            <div class="section">
+                <h2 class="section-title">My Courses</h2>
+                <div class="courses-grid">
+                    <!-- Course Card 1 -->
+                    <div class="course-card">
+                        <div class="course-image" style="background-image: url('https://via.placeholder.com/400x200?text=Mathematics+101');"></div>
+                        <div class="course-info">
+                            <h3 class="course-title">Mathematics 101</h3>
+                            <p class="course-instructor">Dr. Thompson</p>
+                            <div class="course-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 65%;"></div>
+                                </div>
+                                <p class="progress-text">65% Complete</p>
+                            </div>
+                            <div class="course-actions">
+                                <button class="btn btn-primary">Continue</button>
+                                <button class="btn btn-secondary">Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Course Card 2 -->
+                    <div class="course-card">
+                        <div class="course-image" style="background-image: url('https://via.placeholder.com/400x200?text=Computer+Science');"></div>
+                        <div class="course-info">
+                            <h3 class="course-title">Introduction to Computer Science</h3>
+                            <p class="course-instructor">Prof. Johnson</p>
+                            <div class="course-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 30%;"></div>
+                                </div>
+                                <p class="progress-text">30% Complete</p>
+                            </div>
+                            <div class="course-actions">
+                                <button class="btn btn-primary">Continue</button>
+                                <button class="btn btn-secondary">Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add More Courses Card -->
+                    <div class="course-card" onclick="showCourseCatalog()" style="cursor: pointer; display: flex; align-items: center; justify-content: center; background-color: #f9f9f9;">
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="font-size: 48px; margin-bottom: 10px;">+</div>
+                            <h3>Enroll in More Courses</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Catalog Section -->
+            <div class="section" id="courseCatalogSection" style="display: none;">
+                <h2 class="section-title">Course Catalog</h2>
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search courses...">
+                    <button class="search-btn">Search</button>
+                </div>
+                <div class="catalog-filters">
+                    <select class="filter-dropdown">
+                        <option>All Categories</option>
+                        <option>Mathematics</option>
+                        <option>Science</option>
+                        <option>Humanities</option>
+                    </select>
+                    <select class="filter-dropdown">
+                        <option>All Levels</option>
+                        <option>Beginner</option>
+                        <option>Intermediate</option>
+                        <option>Advanced</option>
+                    </select>
+                </div>
+                <div class="courses-grid">
+                    <!-- Sample Catalog Course 1 -->
+                    <div class="course-card">
+                        <div class="course-image" style="background-image: url('https://via.placeholder.com/400x200?text=Physics+101');"></div>
+                        <div class="course-info">
+                            <h3 class="course-title">Physics 101</h3>
+                            <p class="course-instructor">Dr. Williams</p>
+                            <div class="course-actions">
+                                <button class="btn btn-primary" onclick="showCoursePreview('Physics 101')">Preview</button>
+                                <button class="btn btn-secondary">Enroll</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sample Catalog Course 2 -->
+                    <div class="course-card">
+                        <div class="course-image" style="background-image: url('https://via.placeholder.com/400x200?text=Literature');"></div>
+                        <div class="course-info">
+                            <h3 class="course-title">Modern Literature</h3>
+                            <p class="course-instructor">Prof. Davis</p>
+                            <div class="course-actions">
+                                <button class="btn btn-primary" onclick="showCoursePreview('Modern Literature')">Preview</button>
+                                <button class="btn btn-secondary">Enroll</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sample Catalog Course 3 -->
+                    <div class="course-card">
+                        <div class="course-image" style="background-image: url('https://via.placeholder.com/400x200?text=Data+Science');"></div>
+                        <div class="course-info">
+                            <h3 class="course-title">Data Science Fundamentals</h3>
+                            <p class="course-instructor">Dr. Smith</p>
+                            <div class="course-actions">
+                                <button class="btn btn-primary" onclick="showCoursePreview('Data Science Fundamentals')">Preview</button>
+                                <button class="btn btn-secondary">Enroll</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Content Section -->
+            <div class="section" id="learningContentSection" style="display: none;">
+                <h2 class="section-title">Learning: <span id="currentCourseTitle">Mathematics 101</span></h2>
+                <div class="learning-container">
+                    <div class="video-player">
+                        <div class="video-container">
+                            <div class="video-placeholder">Video Player - Lesson 1: Introduction to Algebra</div>
+                        </div>
+                        <div class="video-controls">
+                            <button class="btn btn-secondary" onclick="goBackToCourses()">Back to Courses</button>
+                            <div>
+                                <button class="btn btn-secondary">Previous</button>
+                                <button class="btn btn-primary">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transcript-container">
+                        <h3 class="transcript-title">Transcript</h3>
+                        <div class="transcript-content">
+                            <div class="transcript-line active">[00:00] Welcome to Mathematics 101. In this lesson, we'll cover the basics of algebra.</div>
+                            <div class="transcript-line">[00:30] Algebra is a branch of mathematics dealing with symbols and the rules for manipulating those symbols.</div>
+                            <div class="transcript-line">[01:15] The most common algebraic concept is the equation, which shows the equality of two expressions.</div>
+                            <div class="transcript-line">[02:00] For example, x + 5 = 7 is a simple equation where x is the unknown variable.</div>
+                            <div class="transcript-line">[02:45] To solve for x, we subtract 5 from both sides of the equation, giving us x = 2.</div>
+                            <div class="transcript-line">[03:30] This basic principle can be applied to more complex equations as we'll see in later lessons.</div>
+                            <div class="transcript-line">[04:15] Remember, the goal is always to isolate the variable on one side of the equation.</div>
+                            <div class="transcript-line">[05:00] Let's practice with a few examples before moving on to the next concept.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course Preview Modal -->
+    <div class="modal" id="coursePreviewModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">×</span>
+            <div class="course-preview-header">
+                <div class="course-preview-image"></div>
+                <div class="course-preview-info">
+                    <h3 id="previewCourseTitle">Course Title</h3>
+                    <p id="previewCourseInstructor">Instructor: Dr. Thompson</p>
+                    <p id="previewCourseDuration">Duration: 8 weeks</p>
+                    <p id="previewCourseLevel">Level: Beginner</p>
+                    <button class="btn btn-primary" style="margin-top: 10px;">Enroll Now</button>
+                </div>
+            </div>
+
+            <div style="margin: 20px 0;">
+                <h4>About This Course</h4>
+                <p id="previewCourseDescription">This course provides a comprehensive introduction to the subject, covering all fundamental concepts and practical applications. Students will gain hands-on experience through exercises and projects.</p>
+            </div>
+
+            <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                <div style="flex: 1;">
+                    <h4>Syllabus</h4>
+                    <div class="syllabus-item">
+                        <h4>Week 1: Introduction</h4>
+                        <p>Basic concepts and terminology</p>
+                    </div>
+                    <div class="syllabus-item">
+                        <h4>Week 2: Core Principles</h4>
+                        <p>Understanding the fundamental principles</p>
+                    </div>
+                    <div class="syllabus-item">
+                        <h4>Week 3: Practical Applications</h4>
+                        <p>How these concepts apply in real-world scenarios</p>
+                    </div>
+                </div>
+
+                <div style="flex: 1;">
+                    <h4>Tutor Profile</h4>
+                    <div class="tutor-profile">
+                        <div class="tutor-avatar"></div>
+                        <div class="tutor-info">
+                            <h3 id="previewTutorName">Dr. Thompson</h3>
+                            <p id="previewTutorTitle">Professor of Mathematics</p>
+                            <p id="previewTutorBio">With over 15 years of teaching experience, Dr. Thompson has published numerous papers and received several teaching awards.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="input-area">
+        <input id="msg" placeholder="Type your question..." />
+        <button onclick="sendMessage()">Send</button>
+    
+      </div>
+
+    <script>
+        // Close notification
+        document.getElementById('closeNotification').addEventListener('click', function() {
+            document.getElementById('notificationBar').style.display = 'none';
+        });
+
+        // Show course catalog
+        function showCourseCatalog() {
+            document.getElementById('courseCatalogSection').style.display = 'block';
+            document.querySelector('.section:first-of-type').style.display = 'none';
+        }
+
+        // Show learning content for a course
+        function showLearningContent(courseTitle) {
+            document.getElementById('learningContentSection').style.display = 'block';
+            document.querySelector('.section:first-of-type').style.display = 'none';
+            document.getElementById('currentCourseTitle').textContent = courseTitle;
+        }
+
+        // Go back to courses view from learning content
+        function goBackToCourses() {
+            document.getElementById('learningContentSection').style.display = 'none';
+            document.querySelector('.section:first-of-type').style.display = 'block';
+        }
+
+        // Show course preview modal
+        function showCoursePreview(courseTitle) {
+            const modal = document.getElementById('coursePreviewModal');
+            document.getElementById('previewCourseTitle').textContent = courseTitle;
+            
+            // Set mock data based on course title
+            if (courseTitle === 'Physics 101') {
+                document.getElementById('previewCourseInstructor').textContent = 'Instructor: Dr. Williams';
+                document.getElementById('previewCourseDuration').textContent = 'Duration: 10 weeks';
+                document.getElementById('previewCourseLevel').textContent = 'Level: Intermediate';
+                document.getElementById('previewCourseDescription').textContent = 'This course covers the fundamental principles of physics, including mechanics, thermodynamics, and electromagnetism. Perfect for students beginning their journey in physical sciences.';
+                document.getElementById('previewTutorName').textContent = 'Dr. Williams';
+                document.getElementById('previewTutorTitle').textContent = 'Professor of Physics';
+                document.getElementById('previewTutorBio').textContent = 'Dr. Williams has been teaching physics for 12 years and has research interests in quantum mechanics and astrophysics.';
+            } else if (courseTitle === 'Modern Literature') {
+                document.getElementById('previewCourseInstructor').textContent = 'Instructor: Prof. Davis';
+                document.getElementById('previewCourseDuration').textContent = 'Duration: 6 weeks';
+                document.getElementById('previewCourseLevel').textContent = 'Level: Beginner';
+                document.getElementById('previewCourseDescription').textContent = 'Explore contemporary literary works from around the world, analyzing themes, styles, and cultural contexts of modern literature.';
+                document.getElementById('previewTutorName').textContent = 'Prof. Davis';
+                document.getElementById('previewTutorTitle').textContent = 'Professor of English Literature';
+                document.getElementById('previewTutorBio').textContent = 'Prof. Davis is an award-winning author and literary critic with expertise in 20th and 21st century literature.';
+            } else if (courseTitle === 'Data Science Fundamentals') {
+                document.getElementById('previewCourseInstructor').textContent = 'Instructor: Dr. Smith';
+                document.getElementById('previewCourseDuration').textContent = 'Duration: 12 weeks';
+                document.getElementById('previewCourseLevel').textContent = 'Level: Beginner';
+                document.getElementById('previewCourseDescription').textContent = 'Learn the basics of data science, including data analysis, visualization, and introductory machine learning concepts using Python.';
+                document.getElementById('previewTutorName').textContent = 'Dr. Smith';
+                document.getElementById('previewTutorTitle').textContent = 'Data Scientist and Educator';
+                document.getElementById('previewTutorBio').textContent = 'With a PhD in Computer Science and industry experience, Dr. Smith brings both academic and practical knowledge to the classroom.';
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('coursePreviewModal').style.display = 'none';
+        }
+
+        // Transcript interaction
+        document.querySelectorAll('.transcript-line').forEach(line => {
+            line.addEventListener('click', function() {
+                document.querySelectorAll('.transcript-line').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                // In a real implementation, this would seek the video to the corresponding time
+            });
+        });
+
+        // Simulate clicking "Continue" on Mathematics 101 to show learning content
+        document.querySelector('.course-actions .btn-primary').addEventListener('click', function() {
+            showLearningContent('Mathematics 101');
+        });
+    </script>
+     <script src ="chat.js"></script>
+</body>
+</html>

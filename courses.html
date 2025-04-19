@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnX - Matric & FSC Courses</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
+    <style>
+        :root {
+            --primary-blue: #1a237e;
+            --secondary-blue: #303f9f;
+            --accent: #4fc3f7;
+            --text-dark: #2c3e50;
+            --text-light: #f5f5f5;
+        }
+        
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            position: relative;
+        }
+
+        /* Spline Background */
+        #spline-hero-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 5%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 90%;
+            z-index: 100;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--primary-blue);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary-blue);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            color: white;
+            padding: 180px 5% 120px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background-color: rgba(255,255,255,0.15);
+            backdrop-filter: blur(8px);
+            padding: 25px 30px;
+            border-radius: 12px;
+            min-width: 160px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Courses Section */
+        .courses-section {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 5%;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-top: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 18px;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            padding-bottom: 50px;
+        }
+
+        .course-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+
+        .course-image {
+            height: 200px;
+            background-color: #f5f5f5;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .course-content {
+            padding: 25px;
+        }
+
+        .course-level {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .course-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+
+        .course-description {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .enrollment {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .price {
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 18px;
+        }
+
+        .free-badge {
+            background-color: #4caf50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-dark);
+            color: white;
+            padding: 70px 5% 40px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: white;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 16px;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            opacity: 0.7;
+            font-size: 15px;
+            margin-top: 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero {
+                padding: 150px 5% 100px;
+            }
+            
+            .hero h1 {
+                font-size: 42px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 20px 5%;
+            }
+            
+            .logo {
+                font-size: 24px;
+            }
+            
+            nav {
+                gap: 15px;
+            }
+            
+            .hero {
+                padding: 120px 5% 80px;
+                margin-top: 70px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .stats-container {
+                gap: 15px;
+            }
+            
+            .stat-box {
+                padding: 20px;
+                min-width: 120px;
+            }
+            
+            .stat-number {
+                font-size: 32px;
+            }
+            
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-header h2 {
+                font-size: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 5%;
+            }
+            
+            nav {
+                gap: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero {
+                margin-top: 100px;
+            }
+            
+            .stat-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Spline Background for Hero Section -->
+    <div id="spline-hero-bg">
+        <spline-viewer 
+            url="https://prod.spline.design/wcd0dS2F2pMfSNTu/scene.splinecode"
+            loading-anim
+            hide-ui
+        ></spline-viewer>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="#" class="logo">LEARNX</a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="courses.html" class="active">Courses</a>
+<a href ="student.html"> student dashboard</a>
+<a href ="tutor.html">  dashboard</a>
+        
+            <a href="signuppage.html">Sign In</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Matric & FSC Courses</h1>
+        <p>Comprehensive learning programs designed by top educators. Support independent teachers through enrollment and premium courses.</p>
+        
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-number">150+</div>
+                <div class="stat-label">Courses Available</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">85,000+</div>
+                <div class="stat-label">Students Enrolled</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">200+</div>
+                <div class="stat-label">Educators</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">92%</div>
+                <div class="stat-label">Pass Rate</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Matric Courses -->
+    <section class="courses-section">
+        <div class="section-header">
+            <h2>Matriculation Courses</h2>
+            <p>Comprehensive courses covering all subjects for 9th and 10th grade students following the Pakistani curriculum.</p>
+        </div>
+        
+        <div class="courses-grid">
+            <!-- Course 1 -->
+            <div class="course-card">
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="course-content">
+                    <span class="course-level">Matric</span>
+                    <h3 class="course-title">Mathematics (Full Course)</h3>
+                    <p class="course-description">Complete mathematics curriculum for 9th and 10th grade with practice exercises and solved past papers.</p>
+                    <div class="course-meta">
+                        <span class="enrollment">📚 12,450 students</span>
+                        <span class="price">Rs. 2,999</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Course 2 -->
+            <div class="course-card">
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="course-content">
+                    <span class="course-level">Matric</span>
+                    <h3 class="course-title">Physics (Concept Mastery)</h3>
+                    <p class="course-description">Master physics concepts with animated explanations and practical examples.</p>
+                    <div class="course-meta">
+                        <span class="enrollment">📚 8,720 students</span>
+                        <span class="price">Rs. 2,499</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Course 3 -->
+            <div class="course-card">
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="course-content">
+                    <span class="course-level">Matric</span>
+                    <h3 class="course-title">English (Grammar & Composition)</h3>
+                    <p class="course-description">Improve your English skills with comprehensive grammar and writing lessons.</p>
+                    <div class="course-meta">
+                        <span class="enrollment">📚 6,150 students</span>
+                        <span class="free-badge">FREE</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Course 4 -->
+            <div class="course-card">
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1608848461950-0fe51dfc41cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="course-content">
+                    <span class="course-level">Matric</span>
+                    <h3 class="course-title">Chemistry (Complete Syllabus)</h3>
+                    <p class="course-description">Full coverage of matric chemistry syllabus with interactive simulations.</p>
+                    <div class="course-meta">
+                        <span class="enrollment">📚 7,890 students</span>
+                        <span class="price">Rs. 2,799</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Course 5 -->
+            <div class="course-card">
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="course-content">
+                    <span class="course-level">Matric</span>
+                    <h3 class="course-title">Biology (Conceptual Learning)</h3>
+                    <p class="course-description">Learn biology through 3D models and detailed explanations.</p>
+                    <div class="course-meta">
+                        <span class="enrollment">📚 5,430 students</span>
+                        <span class="price">Rs. 2,299</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Course 6 -->
+            <div class="course-card">
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="course-content">
+                    <span class="course-level">Matric</span>
+                    <h3 class="course-title">Computer Science</h3>
+                    <p class="course-description">Programming fundamentals and computer concepts for matric students.</p>
+                    <div class="course-meta">
+                        <span class="enrollment">📚 4,210 students</span>
+                        <span class="free-badge">FREE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FSC Courses -->
+    <section class="courses-section">
+        <div class="section-header">
+            <h2>FSC (Intermediate) Courses</h2>
+            <p>Advanced courses for 11th and 12th grade students preparing for board examinations and entry tests.</p>
+        </div>
+        
+        <div class="courses-grid">
+            <!-- Course 1 -->
+            <div class="course-card">
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="course-content">
+                    <span class="course-level">FSC Pre-Medical</span>
+                    <h3 class="course-title">Biology (Part I & II)</h3>
+                    <p class="course-description">Detailed coverage of FSC biology with diagrams and medical applications.</p>
+                    <div class="course-meta">
+                        <span class="enrollment">📚 15,670 students</span>
+                        <span class="price">Rs. 3,499</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Course 2 -->
+            <div class="course-card">
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="course-content">
+                    <span class="course-level">FSC Pre-Engineering</span>
+                    <h3 class="course-title">Mathematics (Complete)</h3>
+                    <p class="course-description">All chapters of FSC mathematics with problem-solving techniques.</p>
+                    <div class="course-meta">
+                        <span class="enrollment">📚 18,240 students</span>
+                        <span class="price">Rs. 3,999</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Course 3 -->
+            <div class="course-card">
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="course-content">
+                    <span class="course-level">FSC Pre-Engineering</span>
+                    <h3 class="course-title">Physics (Advanced)</h3>
+                    <p class="course-description">Conceptual physics with numerical problem solving for entry tests.</p>
+                    <div class="course-meta">
+                        <span class="enrollment">📚 12,890 students</span>
+                        <span class="price">Rs. 3,299</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Course 4 -->
+            <div class="course-card">
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1608848461950-0fe51dfc41cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="course-content">
+                    <span class="course-level">FSC Pre-Medical</span>
+                    <h3 class="course-title">Chemistry (Organic Focus)</h3>
+                    <p class="course-description">Special focus on organic chemistry with reaction mechanisms.</p>
+                    <div class="course-meta">
+                        <span class="enrollment">📚 11,450 students</span>
+                        <span class="price">Rs. 3,199</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Course 5 -->
+            <div class="course-card">
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="course-content">
+                    <span class="course-level">FSC ICS</span>
+                    <h3 class="course-title">Computer Science</h3>
+                    <p class="course-description">Programming in C++ and database concepts for ICS students.</p>
+                    <div class="course-meta">
+                        <span class="enrollment">📚 6,780 students</span>
+                        <span class="price">Rs. 2,899</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Course 6 -->
+            <div class="course-card">
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="course-content">
+                    <span class="course-level">FSC All Groups</span>
+                    <h3 class="course-title">English (Advanced Composition)</h3>
+                    <p class="course-description">Essay writing, comprehension and advanced grammar for FSC.</p>
+                    <div class="course-meta">
+                        <span class="enrollment">📚 9,120 students</span>
+                        <span class="free-badge">FREE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">LEARNX</div>
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">For Educators</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="copyright">
+                &copy; 2023 LearnX. All rights reserved. Supporting independent educators through student enrollments.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

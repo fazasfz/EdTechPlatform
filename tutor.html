@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEARNX - Tutor Dashboard</title>
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9ff;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 4rem;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00008B;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #00008B;
+        }
+
+        .nav-links a.active {
+            color: #00008B;
+            border-bottom: 2px solid #00008B;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #00008B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .main-content {
+            margin-top: 72px;
+            padding: 2rem 4rem;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .greeting {
+            font-size: 1.8rem;
+            color: #333;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: #00008B;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #00008B;
+            padding-left: 10px;
+        }
+
+        .tab-container {
+            margin-bottom: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid #00008B;
+            color: #00008B;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .course-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .course-thumbnail {
+            height: 160px;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .course-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .course-info {
+            padding: 1.5rem;
+        }
+
+        .course-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .course-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        .course-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #00008B;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #000066;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #00008B;
+            color: #00008B;
+        }
+
+        .btn-outline:hover {
+            background-color: #f8f9ff;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .file-upload {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .file-upload-label {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: #f8f9ff;
+            border: 1px dashed #00008B;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #00008B;
+        }
+
+        .file-upload-label:hover {
+            background-color: #f0f2ff;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #f8f9ff;
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+        }
+
+        .uploaded-file-name {
+            font-size: 0.9rem;
+            color: #333;
+            flex-grow: 1;
+        }
+
+        .remove-file {
+            color: #ff4d4f;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .video-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .video-item {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-thumbnail {
+            width: 120px;
+            height: 80px;
+            background-color: #e9ecef;
+            margin-right: 1rem;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-details {
+            flex-grow: 1;
+        }
+
+        .video-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .video-duration {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .action-icon:hover {
+            background-color: #f8f9ff;
+            color: #00008B;
+        }
+
+        .transcript-container {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 1.5rem;
+        }
+
+        .transcript-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .transcript-title {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .transcript-body {
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .transcript-timestamp {
+            color: #00008B;
+            font-weight: 500;
+            margin-right: 0.5rem;
+        }
+
+        .students-list {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .students-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .students-table th {
+            background-color: #f8f9ff;
+            text-align: left;
+            padding: 1rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .students-table td {
+            padding: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .student-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .progress-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-arrow {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .progress-arrow.up {
+            background-color: #e6f7e6;
+            color: #52c41a;
+        }
+
+        .progress-arrow.down {
+            background-color: #fff1f0;
+            color: #ff4d4f;
+        }
+
+        .grade {
+            font-weight: 500;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .video-preview {
+            margin: 1.5rem 0;
+            width: 100%;
+            background-color: #f8f9ff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .video-preview video {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+        }
+
+        .drop-zone {
+            border: 2px dashed #00008B;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 10px;
+            background-color: #f8f9ff;
+            color: #6c757d;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+        }
+
+        .drop-zone:hover {
+            background-color: #f0f2ff;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 2rem;
+            }
+            
+            .main-content {
+                padding: 1.5rem;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .video-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .video-thumbnail {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .video-actions {
+                margin-top: 1rem;
+            }
+            
+            .students-table {
+                font-size: 0.9rem;
+            }
+        }
+
+        .spline-banner {
+            width: 100%;
+            height: 200px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        #chat {
+  background: #fff;
+  border: 1px solid #ccc;
+  height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+#chat .you {
+  text-align: right;
+  color: #007bff;
+  margin-bottom: 5px;
+}
+
+#chat .bot {
+  text-align: left;
+  color: #28a745;
+  margin-bottom: 5px;
+}
+
+#input-area {
+  display: flex;
+  gap: 10px;
+}
+
+#msg {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+        spline-viewer {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">LEARNX</a>
+        <div class="nav-links">
+            <a href="#" class="active">Dashboard</a>
+            <a href="courses.html">Courses</a>
+            <a href="index.html">Home</a>
+        
+            <div class="user-menu">
+                <div class="user-avatar">T</div>
+                <span>Dr. Thompson</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="dashboard-header">
+            <h1 class="greeting">Welcome back, Dr. Thompson!</h1>
+            <button class="btn btn-primary" id="create-course-btn">+ Create Course</button>
+        </div>
+
+        <div class="spline-banner">
+            <spline-viewer url="undefined"></spline-viewer>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number">4</div>
+                <div class="stat-label">Active Courses</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">128</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">92%</div>
+                <div class="stat-label">Completion Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8</div>
+                <div class="stat-label">New Enrollments</div>
+            </div>
+        </div>
+
+        <div class="tab-container">
+            <div class="tabs">
+                <div class="tab active" data-tab="my-courses">My Courses</div>
+                <div class="tab" data-tab="create-course">Create Course</div>
+                <div class="tab" data-tab="manage-content">Manage Content</div>
+                <div class="tab" data-tab="enrollments">Enrollments</div>
+            </div>
+
+            <div class="tab-content active" id="my-courses">
+                <div class="section-title">Your Courses</div>
+                <div class="courses-grid">
+                    <div class="course-card">
+                        <div class="course-thumbnail">
+                            <img src="https://source.unsplash.com/random/600x400/?mathematics" alt="Mathematics">
+                        </div>
+                        <div class="course-info">
+                            <h3 class="course-title">Advanced Mathematics</h3>
+                            <div class="course-stats">
+                                <span>42 Students</span>
+                                <span>9 Lessons</span>
+                            </div>
+                            <div class="course-actions">
+                                <button class="btn btn-outline">View</button>
+                                <button class="btn btn-primary">Manage</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-thumbnail">
+                            <img src="https://source.unsplash.com/random/600x400/?physics" alt="Physics">
+                        </div>
+                        <div class="course-info">
+                            <h3 class="course-title">Physics 101</h3>
+                            <div class="course-stats">
+                                <span>36 Students</span>
+                                <span>12 Lessons</span>
+                            </div>
+                            <div class="course-actions">
+                                <button class="btn btn-outline">View</button>
+                                <button class="btn btn-primary">Manage</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-thumbnail">
+                            <img src="https://source.unsplash.com/random/600x400/?chemistry" alt="Chemistry">
+                        </div>
+                        <div class="course-info">
+                            <h3 class="course-title">Chemistry Fundamentals</h3>
+                            <div class="course-stats">
+                                <span>29 Students</span>
+                                <span>8 Lessons</span>
+                            </div>
+                            <div class="course-actions">
+                                <button class="btn btn-outline">View</button>
+                                <button class="btn btn-primary">Manage</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-thumbnail">
+                            <img src="https://source.unsplash.com/random/600x400/?biology" alt="Biology">
+                        </div>
+                        <div class="course-info">
+                            <h3 class="course-title">Biology Advanced</h3>
+                            <div class="course-stats">
+                                <span>21 Students</span>
+                                <span>10 Lessons</span>
+                            </div>
+                            <div class="course-actions">
+                                <button class="btn btn-outline">View</button>
+                                <button class="btn btn-primary">Manage</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="create-course">
+                <div class="section-title">Create a New Course</div>
+                <form id="create-course-form">
+                    <div class="form-group">
+                        <label for="course-title">Course Title</label>
+                        <input type="text" id="course-title" class="form-control" placeholder="Enter course title">
+                    </div>
+                    <div class="form-group">
+                        <label for="course-description">Course Description</label>
+                        <textarea id="course-description" class="form-control" placeholder="Enter course description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Course Thumbnail</label>
+                        <div class="file-upload">
+                            <label class="file-upload-label" for="course-thumbnail">Choose Image</label>
+                            <input type="file" id="course-thumbnail" accept="image/*">
+                            <span id="thumbnail-file-name">No file chosen</span>
+                        </div>
+                        <div id="thumbnail-preview" style="display: none; max-width: 300px; margin-top: 10px;">
+                            <img id="thumbnail-img" style="width: 100%; border-radius: 5px;" src="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Course Videos</label>
+                        <div class="drop-zone" id="video-drop-zone">
+                            <p>Drag and drop video files here or click to browse</p>
+                            <input type="file" id="course-videos" multiple accept="video/*" style="display: none;">
+                        </div>
+                        <div id="uploaded-videos"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Course</button>
+                </form>
+            </div>
+
+            <div class="tab-content" id="manage-content">
+                <div class="section-title">Manage Course Content</div>
+                <div class="form-group">
+                    <label for="select-course">Select Course</label>
+                    <select id="select-course" class="form-control">
+                        <option value="">Select a course to manage</option>
+                        <option value="1">Advanced Mathematics</option>
+                        <option value="2">Physics 101</option>
+                        <option value="3">Chemistry Fundamentals</option>
+                        <option value="4">Biology Advanced</option>
+                    </select>
+                </div>
+                <div id="course-content-editor" style="display: none;">
+                    <div class="form-group">
+                        <label for="edit-course-title">Course Title</label>
+                        <input type="text" id="edit-course-title" class="form-control" value="Advanced Mathematics">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-course-description">Course Description</label>
+                        <textarea id="edit-course-description" class="form-control">This comprehensive mathematics course covers advanced topics including calculus, linear algebra, and statistics.</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Course Videos</label>
+                        <div class="video-container">
+                            <div class="video-item">
+                                <div class="video-thumbnail">
+                                    <img src="https://source.unsplash.com/random/300x200/?mathematics" alt="Video thumbnail">
+                                </div>
+                                <div class="video-details">
+                                    <div class="video-title">Introduction to Advanced Mathematics</div>
+                                    <div class="video-duration">12:34</div>
+                                </div>
+                                <div class="video-actions">
+                                    <div class="action-icon" title="Move up">↑</div>
+                                    <div class="action-icon" title="Move down">↓</div>
+                                    <div class="action-icon" title="Edit">✏</div>
+                                    <div class="action-icon" title="Delete">🗑</div>
+                                </div>
+                            </div>
+                            <div class="video-item">
+                                <div class="video-thumbnail">
+                                    <img src="https://source.unsplash.com/random/300x200/?calculus" alt="Video thumbnail">
+                                </div>
+                                <div class="video-details">
+                                    <div class="video-title">Calculus I: Limits and Continuity</div>
+                                    <div class="video-duration">18:45</div>
+                                </div>
+                                <div class="video-actions">
+                                    <div class="action-icon" title="Move up">↑</div>
+                                    <div class="action-icon" title="Move down">↓</div>
+                                    <div class="action-icon" title="Edit">✏</div>
+                                    <div class="action-icon" title="Delete">🗑</div>
+                                </div>
+                            </div>
+                            <div class="video-item">
+                                <div class="video-thumbnail">
+                                    <img src="https://source.unsplash.com/random/300x200/?algebra" alt="Video thumbnail">
+                                </div>
+                                <div class="video-details">
+                                    <div class="video-title">Linear Algebra: Vectors and Matrices</div>
+                                    <div class="video-duration">15:20</div>
+                                </div>
+                                <div class="video-actions">
+                                    <div class="action-icon" title="Move up">↑</div>
+                                    <div class="action-icon" title="Move down">↓</div>
+                                    <div class="action-icon" title="Edit">✏</div>
+                                    <div class="action-icon" title="Delete">🗑</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline" id="add-video-btn">+ Add Video</button>
+                    </div>
+                    <button class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+
+            <div class="tab-content" id="enrollments">
+                <div class="section-title">Student Enrollments</div>
+                <div class="form-group">
+                    <label for="enrollment-course">Select Course</label>
+                    <select id="enrollment-course" class="form-control">
+                        <option value="1">Advanced Mathematics</option>
+                        <option value="2">Physics 101</option>
+                        <option value="3">Chemistry Fundamentals</option>
+                        <option value="4">Biology Advanced</option>
+                    </select>
+                </div>
+                <div class="students-list">
+                    <table class="students-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Enrollment Date</th>
+                                <th>Course Progress</th>
+                                <th>Current Grade</th>
+                                <th>Progress</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="student-info">
+                                        <div class="student-avatar">S</div>
+                                        <div>
+                                            <div>Sarah Johnson</div>
+                                            <div style="font-size: 0.8rem; color: #6c757d;">sarah.j@example.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Apr 15, 2025</td>
+                                <td>75%</td>
+                                <td><span class="grade">A</span></td>
+                                <td>
+                                    <div class="progress-indicator">
+                                        <div class="progress-arrow up">+</div>
+                                        <span>Improving</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="student-info">
+                                        <div class="student-avatar">M</div>
+                                        <div>
+                                            <div>Michael Chen</div>
+                                            <div style="font-size: 0.8rem; color: #6c757d;">m.chen@example.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Apr 12, 2025</td>
+                                <td>92%</td>
+                                <td><span class="grade">A+</span></td>
+                                <td>
+                                    <div class="progress-indicator">
+                                        <div class="progress-arrow up">+</div>
+                                        <span>Improving</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="student-info">
+                                        <div class="student-avatar">E</div>
+                                        <div>
+                                            <div>Emily Rodriguez</div>
+                                            <div style="font-size: 0.8rem; color: #6c757d;">e.rod@example.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Apr 10, 2025</td>
+                                <td>45%</td>
+                                <td><span class="grade">C</span></td>
+                                <td>
+                                    <div class="progress-indicator">
+                                        <div class="progress-arrow down">-</div>
+                                        <span>Declining</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="student-info">
+                                        <div class="student-avatar">J</div>
+                                        <div>
+                                            <div>James Wilson</div>
+                                            <div style="font-size: 0.8rem; color: #6c757d;">j.wilson@example.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Apr 8, 2025</td>
+                                <td>68%</td>
+                                <td><span class="grade">B</span></td>
+                                <td>
+                                    <div class="progress-indicator">
+                                        <div class="progress-arrow up">+</div>
+                                        <span>Improving</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="student-info">
+                                        <div class="student-avatar">A</div>
+                                        <div>
+                                            <div>Aisha Patel</div>
+                                            <div style="font-size: 0.8rem; color: #6c757d;">a.patel@example.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Apr 5, 2025</td>
+                                <td>89%</td>
+                                <td><span class="grade">A-</span></td>
+                                <td>
+                                    <div class="progress-indicator">
+                                        <div class="progress-arrow up">+</div>
+                                        <span>Improving</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Video Preview Modal -->
+    <div class="modal" id="video-preview-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Video Preview</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="video-preview">
+                <video controls id="preview-video-player">
+                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="transcript-container">
+                <div class="transcript-header">
+                    <h3 class="transcript-title">AI-Generated Transcript</h3>
+                </div>
+                <div class="transcript-body">
+                    <p><span class="transcript-timestamp">00:15</span> Welcome to this lecture on the fundamental principles of calculus.</p>
+                    <p><span class="transcript-timestamp">00:22</span> Today, we'll explore the concept of limits and how they form the foundation of calculus.</p>
+                    <p><span class="transcript-timestamp">00:35</span> A limit describes the behavior of a function as its input approaches a particular value.</p>
+                    <p><span class="transcript-timestamp">00:48</span> Let's consider a simple example using the function f(x) = (x² - 1)/(x - 1).</p>
+                    <p><span class="transcript-timestamp">01:05</span> As x approaches 1, this function appears to be undefined since the denominator becomes zero.</p>
+                    <p><span class="transcript-timestamp">01:18</span> However, through algebraic manipulation, we can see that this function simplifies to f(x) = x + 1 for all values except x = 1.</p>
+                    <p><span class="transcript-timestamp">01:30</span> Therefore, the limit as x approaches 1 is actually 2.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="input-area">
+        <input id="msg" placeholder="Type your question..." />
+        <button onclick="sendMessage()">Send</button>
+    
+      </div>
+      
+
+     
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show tab content that corresponds to clicked tab
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Create Course Button
+        document.getElementById('create-course-btn').addEventListener('click', function() {
+            // Switch to Create Course tab
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('.tab[data-tab="create-course"]').classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById('create-course').classList.add('active');
+        });
+
+        // Course thumbnail preview
+        document.getElementById('course-thumbnail').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('thumbnail-file-name').textContent = file.name;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('thumbnail-img').src = e.target.result;
+                    document.getElementById('thumbnail-preview').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Manage content course selection
+        document.getElementById('select-course').addEventListener('change', function() {
+            if (this.value) {
+                document.getElementById('course-content-editor').style.display = 'block';
+            } else {
+                document.getElementById('course-content-editor').style.display = 'none';
+            }
+        });
+
+        // Video drop zone
+        const dropZone = document.getElementById('video-drop-zone');
+        const fileInput = document.getElementById('course-videos');
+
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.backgroundColor = '#f0f2ff';
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.backgroundColor = '#f8f9ff';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.backgroundColor = '#f8f9ff';
+            
+            if (e.dataTransfer.files.length) {
+                handleVideoFiles(e.dataTransfer.files);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleVideoFiles(e.target.files);
+            }
+        });
+
+        function handleVideoFiles(files) {
+            const container = document.getElementById('uploaded-videos');
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (file.type.startsWith('video/')) {
+                    const videoItem = document.createElement('div');
+                    videoItem.className = 'uploaded-file';
+                    videoItem.innerHTML = `
+                        <span class="uploaded-file-name">${file.name}</span>
+                        <span class="remove-file">×</span>
+                        <button class="btn btn-outline btn-sm preview-btn">Preview</button>
+                    `;
+                    container.appendChild(videoItem);
+                    
+                    // Attach event listeners to the preview button
+                    videoItem.querySelector('.preview-btn').addEventListener('click', () => {
+                        openVideoPreview(file);
+                    });
+                    
+                    // Attach event listeners to the remove button
+                    videoItem.querySelector('.remove-file').addEventListener('click', () => {
+                        videoItem.remove();
+                    });
+                }
+            }
+        }
+
+        // Video preview modal functionality
+        const modal = document.getElementById('video-preview-modal');
+        const closeModalBtn = modal.querySelector('.close-modal');
+        
+        function openVideoPreview(file) {
+            const videoPlayer = document.getElementById('preview-video-player');
+            
+            // If we have a file, create an object URL and set it as the video source
+            if (file) {
+                const url = URL.createObjectURL(file);
+                videoPlayer.querySelector('source').src = url;
+                videoPlayer.load();
+            }
+            
+            modal.classList.add('active');
+        }
+        
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+            // Pause the video when modal is closed
+            document.getElementById('preview-video-player').pause();
+        });
+        
+        // Click outside modal to close
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                document.getElementById('preview-video-player').pause();
+            }
+        });
+        
+        // Add Video button in Manage Content
+        document.getElementById('add-video-btn').addEventListener('click', function() {
+            // Trigger the file upload
+            document.getElementById('course-videos').click();
+        });
+        
+        // Create course form submission
+        document.getElementById('create-course-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('course-title').value;
+            const description = document.getElementById('course-description').value;
+            
+            if (!title || !description) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // Simulate course creation
+            alert('Course created successfully!');
+            
+            // Reset form
+            this.reset();
+            document.getElementById('thumbnail-preview').style.display = 'none';
+            document.getElementById('thumbnail-file-name').textContent = 'No file chosen';
+            document.getElementById('uploaded-videos').innerHTML = '';
+            
+            // Switch to My Courses tab
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('.tab[data-tab="my-courses"]').classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById('my-courses').classList.add('active');
+        });
+    </script>
+    <script src ="chat.js"></script>
+</body>
+</html>
