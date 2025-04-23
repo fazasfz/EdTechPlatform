@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LearnX Landing Page</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
     <style>
         body {
@@ -194,6 +195,266 @@
             border-color: white;
         }
 
+        /* Learning Journey Section */
+        .learning-journey {
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .learning-journey h2 {
+            font-size: 48px;
+            margin-bottom: 80px;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .journey-cards {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .journey-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            width: 300px;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .journey-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .journey-card i {
+            font-size: 48px;
+            margin-bottom: 25px;
+            color: white;
+        }
+
+        .journey-card h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .journey-card p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .journey-card .stat {
+            font-size: 16px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .testimonials h2 {
+            font-size: 48px;
+            margin-bottom: 80px;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .testimonial-cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            perspective: 1000px;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 300px;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transform-style: preserve-3d;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px) rotateY(5deg);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .testimonial-card .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .testimonial-card .quote {
+            font-size: 16px;
+            line-height: 1.7;
+            font-style: italic;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .testimonial-card .name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .testimonial-card .role {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .faq h2 {
+            font-size: 48px;
+            margin-bottom: 80px;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .faq-question {
+            padding: 25px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.7;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 0 25px 25px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 20px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            display: inline-block;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        /* Responsive Styles */
         @media (max-width: 768px) {
             header {
                 padding: 20px 5%;
@@ -225,6 +486,19 @@
                 padding: 14px 24px;
                 min-width: 160px;
             }
+
+            .learning-journey h2,
+            .testimonials h2,
+            .faq h2 {
+                font-size: 36px;
+                margin-bottom: 50px;
+            }
+
+            .journey-card,
+            .testimonial-card {
+                width: 100%;
+                max-width: 350px;
+            }
         }
     </style>
 </head>
@@ -243,29 +517,180 @@
             <div class="logo">LEARNX</div>
             <nav>
                 <a href="courses.html">Courses</a>
-                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
                 <a href="signuppage.html">Sign In / Sign Up</a>
             </nav>
         </header>
 
-        <main class="main-content">
-            <h1>Next-Gen Learning, Powered by AI & Real-Time Collaboration</h1>
-            <p>Interactive courses, AI-generated transcripts, and live chat - all in one place.</p>
-            <div class="button-group">
-                <a href="courses.html">
-                    <button class="button primary-button">Explore Courses</button>
-                  </a>
-                  
-                  <a href="signuppage.html">
-                    <button class="button secondary-button">Sign Up</button>
-                  </a>
-                  
-            </div>
+        <main>
+            <section class="main-content">
+                <h1>Next-Gen Learning, Powered by AI & Real-Time Collaboration</h1>
+                <p>Interactive courses, AI-generated transcripts, and live chat - all in one place.</p>
+                <div class="button-group">
+                    <a href="courses.html">
+                        <button class="button primary-button">Explore Courses</button>
+                    </a>
+                    <a href="signuppage.html">
+                        <button class="button secondary-button">Sign Up</button>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Learning Journey Section -->
+            <section class="learning-journey">
+                <h2>The Learning Journey</h2>
+                <div class="journey-cards">
+                    <div class="journey-card">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>Learn</h3>
+                        <p>Access expert-led courses tailored to real-world skills. Learn at your own pace with our AI-powered platform.</p>
+                        <span class="stat">120+ curated lessons</span>
+                    </div>
+                    <div class="journey-card">
+                        <i class="fas fa-comments"></i>
+                        <h3>Interact</h3>
+                        <p>Engage with peers and educators through real-time chat, group sessions, and AI-assisted Q&A.</p>
+                        <span class="stat">Live chat | Group sessions | AI Q&A</span>
+                    </div>
+                    <div class="journey-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Grow</h3>
+                        <p>Track progress, earn achievements, and apply your knowledge confidently in real-world scenarios.</p>
+                        <span class="stat">80% course completion boost</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials Section -->
+            <section class="testimonials">
+                <h2>What Our Community Says</h2>
+                <div class="testimonial-cards">
+                    <div class="testimonial-card">
+                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Student" class="avatar">
+                        <p class="quote">"LearnX transformed how I study. The AI transcripts and live discussions make complex topics so much easier to understand."</p>
+                        <p class="name">Sarah Johnson</p>
+                        <p class="role">Computer Science Student</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Teacher" class="avatar">
+                        <p class="quote">"As an educator, I've never seen engagement like this. The collaborative tools help students learn from each other."</p>
+                        <p class="name">Dr. Michael Chen</p>
+                        <p class="role">Mathematics Professor</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Creator" class="avatar">
+                        <p class="quote">"Creating courses on LearnX is seamless. The platform handles the tech so I can focus on teaching."</p>
+                        <p class="name">Emma Rodriguez</p>
+                        <p class="role">Independent Educator</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="faq">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            How does the AI assistance work?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Our AI analyzes course content to generate transcripts, summaries, and personalized study recommendations. It also powers our smart Q&A system that can answer student questions in real-time.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Can I collaborate with other students?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Absolutely! Each course has dedicated discussion rooms, group projects spaces, and live chat features. You can study together, share notes, and even form study groups.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Are there certificates for completed courses?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Upon completing a course, you'll unlock advanced learning paths and gain recognition within the LearnX community. Our focus is on real understanding, practical skills, and measurable growth.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            How much does LearnX cost?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            We offer both free and premium courses. The free tier gives you access to basic content, while premium unlocks all features, certificates, and advanced content. Monthly and annual plans are available.
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">LEARNX</div>
+            <div class="footer-links">
+                <a href="courses.html">Courses</a>
+                <a href="about.html">About Us</a>  
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+            </div>
+            <div class="copyright">
+                &copy; 2023 LearnX. All rights reserved.
+            </div>
+        </div>
+    </footer>
 
- 
+    <script>
+        // FAQ Accordion Functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentNode;
+                item.classList.toggle('active');
+                
+                // Close other open items
+                document.querySelectorAll('.faq-item').forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+            });
+        });
 
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(0, 0, 0, 0.3)';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.background = 'transparent';
+                header.style.backdropFilter = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
